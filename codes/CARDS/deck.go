@@ -21,6 +21,12 @@ func newDeck() deck {
 	return newCards
 }
 
+func deal(d deck, num int) (deck, deck) {
+
+	return d[:num], d[num:]
+
+}
+
 func (d deck) print() {
 
 	for i, card := range d {
