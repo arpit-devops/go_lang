@@ -9,34 +9,35 @@ import (
 func main() {
 
 	urls := []string{
-
 		"http://google.com",
-		"http://facebook.com",
-		"http://wikipedia.com",
 		"http://golang.org",
+		"http://fb.com",
 	}
 
 	c := make(chan string)
 
-	for _, link := range urls {
-		go checkStatus(link, c)
+	for _, url := range urls {
+		time.Sleep(2 * time.Second)
+		go checkStatus(url, c)
 	}
 
 	for link := range c {
-		time.Sleep(2 * time.Second)
+
 		go checkStatus(link, c)
+
 	}
 
 }
 
-func checkStatus(link string, c chan string) {
+func checkStatus(url string, c chan string) {
 
-	_, err := http.Get(link)
+	_, err := http.Get(url)
 	if err != nil {
-		fmt.Println(link, " might be down")
-		c <- link
-		return
+		fmt.Println(url, "  i think link is down")
+		c <- url
 	}
-	fmt.Println(link, " is up")
-	c <- link
+
+	fmt.Println(url, " Yep its up")
+	c <- url
+
 }
