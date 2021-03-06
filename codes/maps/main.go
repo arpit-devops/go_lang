@@ -11,5 +11,13 @@ func main() {
 		"GREEN": "G",
 	}
 
-	fmt.Println(colours["RED"])
+	printMap(colours)
+}
+
+func printMap(m map[string]string) {
+
+	for key, value := range m {
+
+		fmt.Println(key, " : ", value)
+	}
 }

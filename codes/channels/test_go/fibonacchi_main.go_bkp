@@ -1,0 +1,28 @@
+package main
+
+import (
+	"fmt"
+	"strconv"
+)
+
+func main() {
+
+	var num int
+	fmt.Println("enter number: ")
+	fmt.Scanf("%d", &num)
+	for i := 1; i <= num; i++ {
+		fmt.Print(strconv.Itoa(fiboRec(i)) + " ")
+	}
+
+}
+
+func fiboRec(n int) int {
+
+	if n <= 1 {
+		return n
+	}
+
+	return fiboRec(n-1) + fiboRec(n-2)
+}
+
+//func fiboLoop()
