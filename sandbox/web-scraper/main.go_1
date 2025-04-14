@@ -1,0 +1,59 @@
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"regexp"
+	"time"
+)
+
+func main() {
+	// Step 1: Fetch the webpage
+	resp, err := http.Get("http://127.0.0.1:5500/Frontend/index.html")
+	if err != nil {
+		fmt.Printf("Failed to fetch page: %v\n", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	// Step 2: Read the body
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Printf("Failed to read response body: %v\n", err)
+		return
+	}
+	html := string(body)
+
+	// Step 3: Extract timestamp using regex
+	re := regexp.MustCompile(`Collected at:\s+(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) UTC`)
+	matches := re.FindStringSubmatch(html)
+	if len(matches) < 2 {
+		fmt.Println("Timestamp not found in the HTML.")
+		return
+	}
+
+	timestampStr := matches[1]
+
+	// Step 4: Parse the timestamp
+	collectedTime, err := time.Parse("2006-01-02 15:04:05", timestampStr)
+	if err != nil {
+		fmt.Printf("Failed to parse timestamp: %v\n", err)
+		return
+	}
+
+	// Step 5: Compare with current time
+	now := time.Now().UTC()
+	diff := now.Sub(collectedTime)
+
+	if diff <= time.Hour {
+		fmt.Println("✅ Page was updated within the last hour.")
+	} else {
+		fmt.Println("❌ Page has NOT been updated within the last hour.")
+	}
+
+	// Optional: debug info
+	fmt.Printf("Collected at: %v UTC\n", collectedTime)
+	fmt.Printf("Current time: %v UTC\n", now)
+	fmt.Printf("Difference: %v\n", diff)
+}

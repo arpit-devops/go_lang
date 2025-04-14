@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
+	"net/http"  // Go's standard library includes a powerful package net/http for building HTTP clients and servers. currently we are building server
 )
+
+// read from  main function
 
 // helloHandler handles HTTP requests sent to the "/hello" endpoint.
 // It checks if the request method is GET and responds with "Hello!".
